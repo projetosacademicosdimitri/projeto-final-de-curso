@@ -2,28 +2,27 @@
 header('Content-Type: text/html; charset=utf-8');
 
 /* testando  a autenticação  do  usuario */
-
 include '../../config/session.php';
-include '../../Model/Database/CmdSql.php';
+include '../../includes.php';
 
+$clienteController = new ClienteController();
+$linhas = $clienteController->execulteAcao('buscar.cliente', $dto = null, $_GET['id']);
 
-$oPessit = new CmdSql;
-$linhas = $oPessit->__buscIdCliente($_GET['id']);
 
 $id = $linhas['idCliente'];
-$vNome = $linhas['Nome'];
-$vTelefone = $linhas['Telefone'];
-$vEndereco = $linhas['Endereco'];
-$vTipoPessoa = $linhas['TipoPessoa'];
-$vCpf = $linhas['Cpf'];
-$vCnpj = $linhas['Cnpj'];
-$vCodMunicipal = $linhas['CodMunicipal'];
-$vContato = $linhas['Contato'];
-$vBairro = $linhas['Bairro'];
-$vCep = $linhas['Cep'];
-$vCidade = $linhas['Cidade'];
-$vEstado = $linhas['Estado'];
-$vNumero = $linhas['Numero'];
+$nome = $linhas['Nome'];
+$telefone = $linhas['Telefone'];
+$endereco = $linhas['Endereco'];
+$tipoPessoa = $linhas['TipoPessoa'];
+$cpf = $linhas['Cpf'];
+$cnpj = $linhas['Cnpj'];
+$codMunicipal = $linhas['CodMunicipal'];
+$contato = $linhas['Contato'];
+$bairro = $linhas['Bairro'];
+$cep = $linhas['Cep'];
+$cidade = $linhas['Cidade'];
+$estado = $linhas['Estado'];
+$numero = $linhas['Numero'];
 ?>
 
 <html lang="en" class="translated-ltr"><head>
@@ -60,17 +59,8 @@ $vNumero = $linhas['Numero'];
         <!-- Final do menu:Fixed navbar -->
         <div id="wrap">    
             <div class="container" style="width: 900px;">
-                <script type="text/javascript">
 
-                    jQuery(function ($) {
-
-                        $("#txtTelCli").mask("(99) 9999-9999");
-                        $("#txtCepEndCli").mask("99999-999");
-
-
-                    });
-                </script>
-                <form role="form" class="form-horizontal" action="../../Controller/editeCliente.php" method="post" >
+                <form role="form" class="form-horizontal" action="../../Submit/cliente.php" method="POST" >
                     <legend>
                         Atualizar dados do Cliente
                     </legend>
@@ -87,14 +77,14 @@ $vNumero = $linhas['Numero'];
                             <div class="col-md-3">
 
                                 <?php
-                                if ($vTipoPessoa == 1) {
+                                if ($tipoPessoa == 1) {
                                     $checkCpf = "checked";
                                     $checkCnpj = "";
-                                    $value = $vCpf;
+                                    $value = $cpf;
                                 } else {
                                     $checkCpf = "";
                                     $checkCnpj = "checked";
-                                    $value = $vCnpj;
+                                    $value = $cnpj;
                                 }
                                 ?>  
 
@@ -114,9 +104,6 @@ $vNumero = $linhas['Numero'];
                                     }
                                 </script>                          
 
-
-
-
                                 <label for="txtCpfCnpjCli">CPF</label>
                                 <?php echo"<input type='radio'value='1'  onclick='typePessoa(1);'  name='rdoPessoa'id='rdoPessoa' $checkCpf  /> ";
                                 ?>
@@ -135,19 +122,19 @@ $vNumero = $linhas['Numero'];
 
                                 <div class="col-md-3">
                                     <label for="txtContatoCli">Nome do contato</label>
-                                    <input type='text'  class='form-control' placeholder='Nome do contato' name='txtNomeContato' id='txtContatoCli' value=<?php echo$vContato; ?>>
+                                    <input type='text'  class='form-control' placeholder='Nome do contato' name='txtNomeContato' id='txtContatoCli' value=<?php echo$contato; ?>>
                                 </div>
 
                                 <div class="col-md-3">
                                     <label for="txtTelCli">Telefone</label>
-                                    <input type="text"   class="form-control" placeholder="Telefone" name="txtTelCliente" id="txtTelCli" value="<?php echo$vTelefone ?>">	
+                                    <input type="text"   class="form-control"  name="txtTelCliente" id="txtTelCli" value="<?php echo $telefone; ?>">	
                                 </div> 
                             </div> 
 
 
                             <div class="col-md-3">
                                 <label for="txtCodMuni">Código municipal</label>
-                                <input type="text" class="form-control"  placeholder="Código municipal" name="txtCodMunicipal" id="txtCodMuni" value="<?php echo$vCodMunicipal; ?>">
+                                <input type="text" class="form-control"  placeholder="Código municipal" name="txtCodMunicipal" id="txtCodMuni" value="<?php echo$codMunicipal; ?>">
                             </div>
 
 
@@ -163,33 +150,33 @@ $vNumero = $linhas['Numero'];
 
                             <div class="col-md-9">
                                 <label for="txtEndCli">Endere&ccedil;o</label>
-                                <input type="text"   class="form-control" placeholder="Endereço" name="txtEndCliente"  value="<?php echo$vEndereco; ?>" id="txtEndCli">
+                                <input type="text"   class="form-control" placeholder="Endereço" name="txtEndCliente"  value="<?php echo$endereco; ?>" id="txtEndCli">
                             </div>
 
                             <div class="col-md-3">
                                 <label for="txtNumEndCli">N&uacute;mero</label>
-                                <input  type="text" class="form-control" placeholder="000" value="<?php echo$vNumero; ?>" name="txtNumEndCliente" id="txtNumEndCli">
+                                <input  type="text" class="form-control" placeholder="000" value="<?php echo$numero; ?>" name="txtNumEndCliente" id="txtNumEndCli">
                             </div> 
 
                             <div style="margin-top: 70px;">
 
                                 <div class="col-md-3">
                                     <label for="txtEndBaiCli">Bairro</label>
-                                    <input type="text"   class="form-control" placeholder="Bairro" value="<?php echo$vBairro; ?>" name="txtBaiEndCliente" id="txtEndBaiCli">
+                                    <input type="text"   class="form-control" placeholder="Bairro" value="<?php echo$bairro; ?>" name="txtBaiEndCliente" id="txtEndBaiCli">
                                 </div> 
 
                                 <div class="col-md-3">
                                     <label for="txtCidEndCli">Cidade</label>
-                                    <input type="text"  class="form-control" placeholder="Cidade" value="<?php echo$vCidade; ?>" name="txtCidEndCliente" id="txtCidEndCli">
+                                    <input type="text"  class="form-control" placeholder="Cidade" value="<?php echo$cidade; ?>" name="txtCidEndCliente" id="txtCidEndCli">
                                 </div> 
                                 <div class="col-md-3">
                                     <label for="txtCepEndCli">CEP</label>
-                                    <input type="text"  class="form-control" placeholder="xxxxxx-xxx" value="<?php echo$vCep; ?>" name="txtCepEndCliente" id="txtCepEndCli" >
+                                    <input type="text"  class="form-control" placeholder="xxxxxx-xxx" value="<?php echo$cep; ?>" name="txtCepEndCliente" id="txtCepEndCli" >
                                 </div>
                                 <div class="col-md-3">
                                     <label >UF</label>
                                     <select name="txtUfEndCliente" class="form-control">
-                                        <option  selected="" value="<?php echo$vEstado; ?>"><?php echo$vEstado; ?></option>
+                                        <option  selected="" value="<?php echo$estado; ?>"><?php echo$estado; ?></option>
                                         <option value="Acre">Acre</option>		
                                         <option  value="Alagoas">Alagoas</option>
                                         <option value="Amapá">Amapá</option>
@@ -227,18 +214,14 @@ $vNumero = $linhas['Numero'];
                         <input type="hidden" name="C_id"  value="<?php echo $id; ?>" />
                     <?php } ?>
 
-                    <?php if (isset($_GET['updateinativos'])) { ?>
-                        <input type="hidden" name="Li_id"  value="<?php echo $id; ?>" />
-                    <?php } else {
-                        ?>
                         <input type="hidden" name="id"  value="<?php echo $id; ?>" />
-                    <?php } ?>
+                   
 
                     <input type="hidden" name="pagina"  value="<?php echo $_GET['pagina']; ?>" />
 
                     <div class="form-group">
                         <div class="col-md-2" style="margin-top: 10px; margin-left: 87%; margin-bottom: 20px;">
-                            <button class="btn btn-primary prefix_10"  name="Gravar"  type="submit">Gravar</button> </div></div>
+                            <button class="btn btn-primary prefix_10"  name="edite_cliente"  type="submit">Gravar</button> </div></div>
                 </form>	 
             </div> <!-- /container -->
         </div>
@@ -254,5 +237,16 @@ $vNumero = $linhas['Numero'];
         <div id="goog-gt-tt" class="goog-tooltip skiptranslate" dir="ltr" style="visibility: hidden; left: 632px; top: 218px; display: none;"><div style="padding: 8px;"><div><div class="logo"><img src="https://www.google.com/images/icons/product/translate-32.png" width="20" height="20"></div></div></div><div class="top" style="padding: 8px; float: left; width: 100%;"><h1 class="title gray">Texto original</h1></div><div class="middle" style="padding: 8px;"><div class="original-text">This example is a quick exercise to illustrate how the default, static and fixed to top navbar work.</div></div><div class="bottom" style="padding: 8px;"><div class="activity-links"><span class="activity-link">Sugira uma tradução melhor</span><span class="activity-link"></span></div><div class="started-activity-container"><hr style="color: #CCC; background-color: #CCC; height: 1px; border: none;"><div class="activity-root"></div></div></div><div class="status-message" style="display: none; opacity: 0;"></div></div>
         <script src="../Front_end/js/jquery-1.8.0.min.js"></script> 
         <script src="../Front_end/js/jquery.maskedinput.js"></script>
+
+        <script type="text/javascript">
+
+                        jQuery(function ($) {
+
+                           $("#txtTelCli").mask('(99)9999-9999');
+                            $("#txtCepEndCli").mask("99999-999");
+
+
+                        });
+        </script>
 
     </body></html>

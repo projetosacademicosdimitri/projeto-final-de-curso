@@ -1,15 +1,20 @@
 <?php
+
 /*
  * @author Dimitri Miranda 
  */
 
-include '../Controller/ClienteController.php';
+//include '../Controller/ClienteController.php';
+
+include '../includes.php';
 
 /* Cliente controller */
 $clienteController = new ClienteController();
 
 /* Objeto de transferencia de dados ( data transfer object ) */
 $dto = new StdClass;
+
+
 
 if (isset($_POST['salvar_cliente'])) {
 
@@ -48,6 +53,9 @@ if (isset($_POST['salvar_cliente'])) {
 }
 if (isset($_POST['edite_cliente'])) {
 
+
+    $dto = new stdClass();
+
     $dto->nome = $_POST['txtNomCliente'];
     if ($_POST['rdoPessoa'] == 1) {
         $dto->tipoPessoa = 1;
@@ -58,6 +66,7 @@ if (isset($_POST['edite_cliente'])) {
         $dto->cnpj = $_POST['txtPessoa'];
         $dto->cpf = " ";
     }
+
 
     $dto->contato = $_POST['txtNomeContato'];
     $dto->telefone = $_POST['txtTelCliente'];
@@ -72,14 +81,13 @@ if (isset($_POST['edite_cliente'])) {
     if (isset($_POST['id'])) {
 
         $dto->idCliente = $_POST['id'];
-
         if ($clienteController->execulteAcao('editar.cliente', $dto)) {
             $pagina = $_POST['pagina'];
-
             header("Location:../View/Cliente/listCliente.php?pagina=$pagina&ok");
         }
     }
 }
+
 if (isset($_GET['inativar'])) {
     /* salva o numero da paginacao */
     $pagina = $_GET['pagina'];

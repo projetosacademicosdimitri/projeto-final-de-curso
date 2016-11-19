@@ -89,8 +89,6 @@ include '../../config/session.php';
 
                                     }
                                 </script>
-
-
                                 <label for="txtCpfCnpjCli">CPF</label>
                                 <input type="radio" value="1" name="rdoPessoa"  onclick="typePessoa(1);"id="rdoPessoa"/>   
 
@@ -203,11 +201,6 @@ include '../../config/session.php';
                 </form>	 
             </div> <!-- /container -->
         </div>
-
-
-
-
-
 
         <!-- Inicio do rodapé -->
         <?php include '../MasterPages/footer.php'; ?>

@@ -61,7 +61,7 @@ class Cliente extends Conexao
         }
     }
 
-    public function insertCliente($Pcliente)
+    public function insertCliente($cliente)
     {
         try {
 
@@ -70,19 +70,19 @@ class Cliente extends Conexao
         ";
 
             $q = $this->prepare($sql);
-            $q->bindParam(1, $Pcliente->nome);
-            $q->bindParam(2, $Pcliente->telefone);
-            $q->bindParam(3, $Pcliente->endereco);
-            $q->bindParam(4, $Pcliente->tipoPessoa);
-            $q->bindParam(5, $Pcliente->cpf);
-            $q->bindParam(6, $Pcliente->cnpj);
-            $q->bindParam(7, $Pcliente->codMunicipal);
-            $q->bindParam(8, $Pcliente->contato);
-            $q->bindParam(9, $Pcliente->bairro);
-            $q->bindparam(10,$Pcliente->cep);
-            $q->bindparam(11,$Pcliente->cidade);
-            $q->bindParam(12,$Pcliente->estado);
-            $q->bindParam(13,$Pcliente->numero);
+            $q->bindParam(1, $cliente->nome);
+            $q->bindParam(2, $cliente->telefone);
+            $q->bindParam(3, $cliente->endereco);
+            $q->bindParam(4, $cliente->tipoPessoa);
+            $q->bindParam(5, $cliente->cpf);
+            $q->bindParam(6, $cliente->cnpj);
+            $q->bindParam(7, $cliente->codMunicipal);
+            $q->bindParam(8, $cliente->contato);
+            $q->bindParam(9, $cliente->bairro);
+            $q->bindparam(10, $cliente->cep);
+            $q->bindparam(11, $cliente->cidade);
+            $q->bindParam(12, $cliente->estado);
+            $q->bindParam(13, $cliente->numero);
             $q->execute();
             return true;
         } catch (PDOException $ex) {
@@ -122,7 +122,7 @@ class Cliente extends Conexao
         return $q->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function updateCliente()
+    public function updateCliente($cliente)
     {
         try {
             $sql = " UPDATE cliente  SET 
@@ -142,20 +142,20 @@ class Cliente extends Conexao
                      WHERE      idCliente = ? ;";
 
             $q = $this->prepare($sql);
-            $q->bindParam(1, $this->nome);
-            $q->bindParam(2, $this->telefone);
-            $q->bindParam(3, $this->endereco);
-            $q->bindParam(4, $this->tipoPessoa);
-            $q->bindParam(5, $this->cpf);
-            $q->bindParam(6, $this->cpf);
-            $q->bindParam(7, $this->codMunicipal);
-            $q->bindParam(8, $this->contato);
-            $q->bindParam(9, $this->bairro);
-            $q->bindparam(10, $this->cep);
-            $q->bindparam(11, $this->cidade);
-            $q->bindParam(12, $this->estado);
-            $q->bindParam(13, $this->numero);
-            $q->bindParam(14, $this->idCliente);
+            $q->bindParam(1, $cliente->nome);
+            $q->bindParam(2, $cliente->telefone);
+            $q->bindParam(3, $cliente->endereco);
+            $q->bindParam(4, $cliente->tipoPessoa);
+            $q->bindParam(5, $cliente->cpf);
+            $q->bindParam(6, $cliente->cpf);
+            $q->bindParam(7, $cliente->codMunicipal);
+            $q->bindParam(8, $cliente->contato);
+            $q->bindParam(9, $cliente->bairro);
+            $q->bindparam(10, $cliente->cep);
+            $q->bindparam(11, $cliente->cidade);
+            $q->bindParam(12, $cliente->estado);
+            $q->bindParam(13, $cliente->numero);
+            $q->bindParam(14, $cliente->idCliente);
 
             $q->execute();
 
@@ -194,6 +194,24 @@ class Cliente extends Conexao
 
             return FALSE;
         }
+    }
+
+    public function clientesPaginacao($paginacao, $status)
+    {
+
+        $sql = " SELECT * FROM cliente WHERE UPPER(Status) = UPPER('$status') ORDER BY Nome ASC limit ? ,?";
+
+        $stm = $this->prepare($sql);
+        $stm->bindValue(1, (int) $paginacao->inicio, PDO::PARAM_INT);
+        $stm->bindValue(2, (int) $paginacao->qtdPorPagina, PDO::PARAM_INT);
+        $stm->execute();
+        return $stm->fetchAll();
+    }
+
+    public function countClientes($status)
+    {
+        $sql = "SELECT count(*) as total FROM cliente WHERE UPPER(Status) = UPPER('$status') ";
+        return $this->query($sql)->fetch(PDO::FETCH_OBJ);
     }
 
 }

@@ -2,28 +2,25 @@
 header('Content-Type: text/html; charset=utf-8');
 
 /* testando  a autenticação  do  usuario */
-include_once '../../config/session.php';
-include_once '../../Model/Cliente.php';
 
-
-$cliente = new Cliente();
-
-$linhas = $cliente->buscIdCliente($_GET['id']);
-
-$vIdCliente = $linhas['idCliente'];
-$vNome = $linhas['Nome'];
-$vTelefone = $linhas['Telefone'];
-$vEndereco = $linhas['Endereco'];
-$vTipoPessoa = $linhas['TipoPessoa'];
-$vCpf = $linhas['Cpf'];
-$vCnpj = $linhas['Cnpj'];
-$vCodMunicipal = $linhas['CodMunicipal'];
-$vContato = $linhas['Contato'];
-$vBairro = $linhas['Bairro'];
-$vCep = $linhas['Cep'];
-$vCidade = $linhas['Cidade'];
-$vEstado = $linhas['Estado'];
-$vNumero = $linhas['Numero'];
+include '../../includes.php';
+$dto = null;
+$clienteController = new ClienteController();
+$linhas = $clienteController->execulteAcao('buscar.cliente', $dto, $_GET['id']);
+$idCliente = $linhas['idCliente'];
+$nome = $linhas['Nome'];
+$telefone = $linhas['Telefone'];
+$endereco = $linhas['Endereco'];
+$tipoPessoa = $linhas['TipoPessoa'];
+$cpf = $linhas['Cpf'];
+$cnpj = $linhas['Cnpj'];
+$codMunicipal = $linhas['CodMunicipal'];
+$contato = $linhas['Contato'];
+$bairro = $linhas['Bairro'];
+$cep = $linhas['Cep'];
+$cidade = $linhas['Cidade'];
+$estado = $linhas['Estado'];
+$numero = $linhas['Numero'];
 ?>
 
 <html>
@@ -43,40 +40,40 @@ $vNumero = $linhas['Numero'];
                 <!-- Table -->
 
                 <?php
-                $Label = "";
-                $vValue = "";
-                if ($vTipoPessoa == '1') {
-                    $Label = "CPF:";
-                    $vValue = $vCpf;
+                $label = "";
+                $value = "";
+                if ($tipoPessoa == '1') {
+                    $label = "CPF:";
+                    $value = $cpf;
                 } else
-                if ($vTipoPessoa == '2') {
-                    $Label = "CNPJ:";
-                    $vValue = $vCnpj;
+                if ($tipoPessoa == '2') {
+                    $label = "CNPJ:";
+                    $value = $cnpj;
                 }
                 ?>
 
                 <table class=" table table-condensed">
                     <tr>
-                        <td class="col-md-3"><b>Nome:</b></td><td class="col-md-3"><?php echo $vNome ?></td><td class="col-md-3"><b><?php echo $Label ?></b></td><td class="col-md-3">
-                            <?php echo $vValue ?></td>
+                        <td class="col-md-3"><b>Nome:</b></td><td class="col-md-3"><?php echo $nome ?></td><td class="col-md-3"><b><?php echo $label ?></b></td><td class="col-md-3">
+                            <?php echo $value ?></td>
                     </tr>
                     <tr>
-                        <td class="col-md-3"><b>Nome do contato:</b></td><td><?php echo $vContato ?></td><td class="col-md-3"><b>Telefone:</b></td><td><?php echo $vTelefone ?></td>
+                        <td class="col-md-3"><b>Nome do contato:</b></td><td><?php echo $contato ?></td><td class="col-md-3"><b>Telefone:</b></td><td><?php echo $telefone ?></td>
                     </tr>
                     <tr>
-                        <td class="col-md-3"><b>Código municipal:</b></td><td><?php echo $vCodMunicipal ?></td><td class="col-md-3"><b></b></td><td></td>
+                        <td class="col-md-3"><b>Código municipal:</b></td><td><?php echo $codMunicipal ?></td><td class="col-md-3"><b></b></td><td></td>
                     </tr>
                 </table> 
                 <div class="panel-heading"><b>Endereço</b></div>
                 <table class=" table table-condensed">
                     <tr>
-                        <td class="col-md-3"><b>Endereço:</b></td><td class="col-md-3"><?php echo $vEndereco ?></td><td class="col-md-3"><b>Número:</b></td><td class="col-md-3"><?php echo $vNumero ?></td>
+                        <td class="col-md-3"><b>Endereço:</b></td><td class="col-md-3"><?php echo $endereco ?></td><td class="col-md-3"><b>Número:</b></td><td class="col-md-3"><?php echo $numero ?></td>
                     </tr>
                     <tr>
-                        <td class="col-md-3"><b>Bairro:</b></td><td><?php echo $vBairro ?></td><td class="col-md-3"><b>Cidade:</b></td><td><?php echo $vCidade ?></td>
+                        <td class="col-md-3"><b>Bairro:</b></td><td><?php echo $bairro ?></td><td class="col-md-3"><b>Cidade:</b></td><td><?php echo $cidade ?></td>
                     </tr>
                     <tr>
-                        <td class="col-md-3"><b>CEP:</b></td><td><?php echo $vCep ?></td><td class="col-md-3"><b>UF:</b></td><td><?php echo $vEstado ?></td>
+                        <td class="col-md-3"><b>CEP:</b></td><td><?php echo $cep ?></td><td class="col-md-3"><b>UF:</b></td><td><?php echo $estado ?></td>
                     </tr>
                 </table>
             </div>
@@ -101,14 +98,9 @@ $vNumero = $linhas['Numero'];
                 <button class="btn btn-primary prefix_10" type="button" name="gravar" <?php echo $pg; ?> value="" ><span class="glyphicon glyphicon-arrow-left" style="margin-right: 5px;"></span>Voltar</button> </div>
         </div>
     </div> <!-- /container -->
-
-
-
-
-    <!-- Inicio do rodapé -->
+  <!-- Inicio do rodapé -->
     <?php include '../MasterPages/footer.php'; ?>
     <!-- Final do rodapé -->
-
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

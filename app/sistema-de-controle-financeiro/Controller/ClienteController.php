@@ -5,7 +5,7 @@
  *
  * @author dimitri.miranda
  */
-include_once '../Model/Cliente.php';
+//include_once '../Model/Cliente.php';
 
 class ClienteController
 {
@@ -17,14 +17,14 @@ class ClienteController
         $this->cliente = new Cliente();
     }
 
-    private function insertCliente($obj)
+    private function insertCliente($cliente)
     {
-        return $this->cliente->insertCliente($obj);
+        return $this->cliente->insertCliente($cliente);
     }
 
-    private function updateCliente($obj)
+    private function updateCliente($cliente)
     {
-        return $this->cliente->updateCliente($obj);
+        return $this->cliente->updateCliente($cliente);
     }
 
     private function inativarCliente($idCliente)
@@ -47,32 +47,63 @@ class ClienteController
         return $this->cliente->listAllClienteAtivo();
     }
 
-    private function buscIdCliente($idCliente)
+    private function buscaById($idCliente)
     {
         return $this->cliente->buscIdCliente($idCliente);
     }
 
-    public function execulteAcao($acao = null, $obj = null, $idCliente = null)
+    public function clientesPaginacao($paginacao, $status)
+    {
+        return $this->cliente->clientesPaginacao($paginacao, $status);
+    }
+
+    public function countClientes($status)
+    {
+        return $this->cliente->countClientes($status);
+    }
+
+    public function execulteAcao($acao = null, $cliente = null, $idCliente = null, $paginacao = null)
     {
 
         switch ($acao) {
 
             case 'salvar.cliente':
-                return $this->insertCliente($obj);
+                return $this->insertCliente($cliente);
                 break;
 
             case 'editar.cliente':
-                return $this->updateCliente($obj);
+                return $this->updateCliente($cliente);
                 break;
+
 
             case 'inativar.cliente':
                 return $this->inativarCliente($idCliente);
                 break;
-            
+
             case 'ativar.cliente':
-                return $this->ativarCliente($idCliente);
+                return $this->ativarFuncionario($idCliente);
                 break;
 
+            case 'buscar.cliente':
+                return $this->buscaById($idCliente);
+                break;
+
+
+            case 'paginacao.ativos.cliente':
+                return $this->clientesPaginacao($paginacao, 'ativo');
+                break;
+
+            case 'paginacao.inativos.cliente':
+                return $this->clientesPaginacao($paginacao, 'inativo');
+                break;
+
+            case 'conte.total.ativos.cliente':
+                return $this->countClientes('ativo');
+                break;
+
+            case 'conte.total.inativos.cliente':
+                return $this->countClientes('inativo');
+                break;
 
             default:
                 break;

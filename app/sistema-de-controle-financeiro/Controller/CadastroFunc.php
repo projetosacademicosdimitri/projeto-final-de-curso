@@ -30,9 +30,10 @@
    $oFunc->__setPisFunc($_POST['txtPIS']);
    $oFunc->__setUfCTPS($_POST['txtUfCTPS']);
   
-     $source = array('.', ','); 
+      $source = array('.', ','); 
       $replace = array('', '.');
-    $valor = str_replace($source ,$replace,  $_POST['txtSal']); //procura todas as virgulas   e substitui por pontos
+    
+      $valor = str_replace($source ,$replace,  $_POST['txtSal']); //procura todas as virgulas e substitui por pontos
 
 	$oFunc->__setSalarioFunc($valor);
 

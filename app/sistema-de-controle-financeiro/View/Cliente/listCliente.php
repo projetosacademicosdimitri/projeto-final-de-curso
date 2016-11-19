@@ -11,7 +11,8 @@ and open the template in the editor.
 
         <title>SCA - Lista de clientes</title>
         <link rel="shortcut icon" href="../Front_end/favicon.ico">
-        <?php include_once '../../Model/Database/CmdSql.php';
+        <?php
+        include_once '../../Model/Database/CmdSql.php';
         header('Content-Type: text/html; charset=utf-8');
         ?>
         <!-- Importa o Bootstrap core CSS -->
@@ -27,7 +28,7 @@ and open the template in the editor.
         <link type="text/css" rel="stylesheet" charset="UTF-8" href="http://translate.googleapis.com/translate_static/css/translateelement.css"><script type="text/javascript" charset="UTF-8" src="http://translate.googleapis.com/translate_static/js/element/main_pt-BR.js"></script><script type="text/javascript" charset="UTF-8" src="http://translate.googleapis.com/translate_static/js/element/17/element_main.js"></script></head>
 
     <body>
-<?php include'../MasterPages/menu1.php' ?>
+        <?php include'../MasterPages/menu1.php' ?>
 
         <!-- Final do menu:Fixed navbar -->
 
@@ -45,7 +46,6 @@ and open the template in the editor.
 <?php } ?>
 
         </script>
-
         <div id="wrap">    
             <div class="container" style="width: 900px;">
 
@@ -65,41 +65,19 @@ and open the template in the editor.
                             <td><b>Editar</b></td>
                             <td><b>Inativar</b></td>
                         </tr>
-
-
                         <tr>
                             <?php
-                            include_once '../../Model/Database/CmdSql.php';
-                            /* .
-                              Essas linhas  de codigo ficam responsavéis
-                              pela  paginação  vinda do  banco  de  dados
+                            include '../../includes.php';
 
-                              Crio um obj de acesso a camada de dados
-                             *  $obj = new CmdSql(); ele executarar  o  select 
-                              Crio uma  variavel "$ctrl" que recebe a requisição da pagina
-                              $ctrl= $_GET['pagina'];
-                              o menor valor  numerico que essa  variavel  terá é 1
-                              pois um  valor  menor  que 1  daria problema  na  logica
-                              do  select
-                              logo  abaixo  crio  uma  variavél chamada $por_pagina é atribuida o valor 3
-                             * a variavél  $por_pagina diz  no select que apenas é pra vim do
-                              banco  3 registros  por vez graças a função  limit  do mysql
-                             * depois  crio  uma  variavel  chamada init que significa inicialização 
-                             * ela tmb será  usada como parametro da  função  limit  do mysql
-                             * a variavél  init é inicializada dessa forma:
-                             * o numero da  pagina vindo via  get( - 1)*por_pagina 
-                             * 
-                             */
-                            $obj = new CmdSql();
-                            $ctrl = $_GET['pagina'];
+                            $clienteController = new ClienteController();
 
-                            if ($ctrl < 1)
-                                $ctrl = 1;
-                            $por_pagina = 10;
-                            $init = ( $ctrl - 1) * $por_pagina;
-                            $result = $obj->query("SELECT * FROM cliente WHERE Status = 'Ativo' ORDER BY Nome ASC limit $init, $por_pagina");
-                            $result_total = $obj->query("SELECT count(*) as total FROM cliente WHERE Status = 'Ativo'")->fetch(PDO::FETCH_OBJ);
-                            $num_paginas = ceil($result_total->total / $por_pagina);
+                            $paginacao = new StdClass();
+
+                            $paginacao->inicio = ( $_GET['pagina'] < 1 ) ? 1 : $_GET['pagina'];
+                            $paginacao->qtdPorPagina = 10;
+                            $result = $clienteController->execulteAcao('paginacao.ativos.cliente', $cliente = null, $idCliente = null, $paginacao);
+                            $result_total = $clienteController->execulteAcao('conte.total.ativos.cliente');
+                            $num_paginas = ceil($result_total->total / $paginacao->qtdPorPagina);
                             ?>
 
                             <?php foreach ($result as $linha) { ?>
@@ -118,39 +96,31 @@ and open the template in the editor.
                 <center>
                     <ul class="pagination">
 
-
-
-
                         <?php
-                        if ($ctrl > 1) {
+                        if ($paginacao->inicio > 1) {
                             echo '<li><a href="listCliente.php?pagina=1" title="Primeira p&aacute;gina">&lt;&lt;</a></li>';
                             echo '<li><a href="listCliente.php?pagina=' . ($ctrl - 1) . '" title="P&aacute;gina anterior">&lt;</a></li>';
                         }
-                        if (($ctrl - 4) < 1) {
+                        if (($paginacao->inicio - 4) < 1) {
                             $anterior = 1;
                         } else {
-                            $anterior = $ctrl - 4;
+                            $anterior = $paginacao->inicio - 4;
                         }
 
-                        if (($ctrl + 4) > $num_paginas) {
+                        if (($paginacao->inicio + 4) > $num_paginas) {
                             $posterior = $num_paginas;
                         } else {
-                            $posterior = $ctrl + 4;
+                            $posterior = $paginacao->inicio + 4;
                         }
 
                         for ($i = $anterior; $i <= $posterior && $i <= $num_paginas; $i++) {
-
-
                             echo "<li><a href=\"listCliente.php?pagina=$i\">$i</a></li>";
                         }
-                        if ($ctrl < $num_paginas) {
-                            echo '<li><a href="listCliente.php?pagina=' . ($ctrl + 1) . '" title="Pr&oacute;xima p&aacute;gina">&gt;</a></li>';
+                        if ($paginacao->inicio < $num_paginas) {
+                            echo '<li><a href="listCliente.php?pagina=' . ($paginacao->inicio + 1) . '" title="Pr&oacute;xima p&aacute;gina">&gt;</a></li>';
                             echo "<li><a href=\"listCliente.php?pagina=$num_paginas\" title=\"Ultima p&aacute;gina\">&gt;&gt;</a></li>";
                         }
                         ?>
-
-
-
                     </ul>
                 </center>
 
@@ -160,7 +130,7 @@ and open the template in the editor.
             </div> <!-- /container -->
         </div>
         <!-- Inicio do rodapé -->
-<?php include '../MasterPages/footer.php'; ?>
+        <?php include '../MasterPages/footer.php'; ?>
         <!-- Final do rodapé -->
 
         <!-- Bootstrap core JavaScript
